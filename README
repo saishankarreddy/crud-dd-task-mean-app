@@ -21,19 +21,19 @@ Cloud: AWS EC2 (Ubuntu 24.04)
 📁 Project Structure
 crud-dd-task-mean-app/
 ├── backend/
-│   ├── Dockerfile
-│   ├── server.js
-│   └── app/
+│   ├── Dockerfile
+│   ├── server.js
+│   └── app/
 ├── frontend/
-│   ├── Dockerfile
-│   ├── src/
-│   └── dist/               # generated after build
+│   ├── Dockerfile
+│   ├── src/
+│   └── dist/               # generated after build
 ├── nginx/
-│   └── nginx.conf
+│   └── nginx.conf
 ├── docker-compose.yml
 ├── .github/
-│   └── workflows/
-│       └── backend-cicd.yml
+│   └── workflows/
+│       └── backend-cicd.yml
 └── README.md
 ⚙️ Prerequisites
 Local Machine
@@ -170,3 +170,4 @@ EC2 is used only for running containers
 CI/CD pipelines should build images, not servers
 
 Angular builds are resource intensive and should be handled carefully
+ this is a readme of my git repo , i want to make this more beautiful and it should be proffesional
