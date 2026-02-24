@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mean-net
+
+  backend:
+    image: saishankarreddy/mean-backend:latest
+    container_name: backend
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/meanapp
+    networks:
+      - mean-net
+
+  frontend:
+    image: saishankarreddy/mean-frontend:latest
+    container_name: frontend
+    networks:
+      - mean-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - mean-net
+
+volumes:
+  mongo_data:
+
+networks:
+  mean-net:
