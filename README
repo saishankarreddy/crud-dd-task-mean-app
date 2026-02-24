@@ -1,0 +1,172 @@
+🚀 MEAN Stack Application – Dockerized Deployment with CI/CD
+
+This project demonstrates the containerization, deployment, and CI/CD automation of a MEAN stack application using Docker, Docker Compose, GitHub Actions, and Nginx.
+
+🧱 Tech Stack
+
+Frontend: Angular (served via Nginx)
+
+Backend: Node.js + Express
+
+Database: MongoDB
+
+Containerization: Docker, Docker Compose
+
+CI/CD: GitHub Actions
+
+Reverse Proxy: Nginx
+
+Cloud: AWS EC2 (Ubuntu 24.04)
+
+📁 Project Structure
+crud-dd-task-mean-app/
+├── backend/
+│   ├── Dockerfile
+│   ├── server.js
+│   └── app/
+├── frontend/
+│   ├── Dockerfile
+│   ├── src/
+│   └── dist/               # generated after build
+├── nginx/
+│   └── nginx.conf
+├── docker-compose.yml
+├── .github/
+│   └── workflows/
+│       └── backend-cicd.yml
+└── README.md
+⚙️ Prerequisites
+Local Machine
+
+Node.js ≥ 18
+
+Docker
+
+Git
+
+Cloud
+
+AWS EC2 (Ubuntu 24.04)
+
+Docker & Docker Compose installed
+
+Port 80 and 8080 open in Security Group
+
+🐳 Docker Setup
+Backend Dockerfile
+
+Builds Node.js backend
+
+Exposes port 8080
+
+Connects to MongoDB via Docker network
+
+Frontend Dockerfile
+
+Serves prebuilt Angular static files
+
+Uses lightweight nginx:alpine
+
+Docker Compose Services
+
+mongo
+
+backend
+
+frontend
+
+nginx
+
+🧪 Backend Verification (Standalone)
+
+After deployment, verify backend is working:
+
+curl http://localhost:8080
+
+Expected response:
+
+{"message":"Welcome to Test application."}
+🌐 Nginx Reverse Proxy
+
+Nginx routes traffic as follows:
+
+Path	Service
+/	Angular frontend
+/api	Node.js backend
+
+Everything is accessible via port 80.
+
+🔁 CI/CD with GitHub Actions (Backend)
+Workflow Location
+.github/workflows/backend-cicd.yml
+CI/CD Flow
+
+Code pushed to main
+
+GitHub Actions triggers pipeline
+
+Backend Docker image is built
+
+Image is pushed to Docker Hub
+
+EC2 is accessed via SSH
+
+Backend container is updated using Docker Compose
+
+Trigger Conditions
+
+Pipeline runs when:
+
+Files inside backend/ change
+
+OR docker-compose.yml changes
+
+🔐 GitHub Secrets Configuration
+
+Add the following secrets in:
+
+GitHub → Settings → Secrets → Actions
+
+Secret Name	Description
+DOCKERHUB_USERNAME	Docker Hub username
+DOCKERHUB_TOKEN	Docker Hub access token
+EC2_HOST	EC2 public IP
+EC2_USER	ubuntu
+EC2_SSH_KEY	Private key (.pem)
+🧠 Frontend Strategy (Low RAM Optimized)
+
+Due to limited system memory:
+
+Angular is built once locally
+
+Only static files are deployed
+
+No Angular build in CI/CD
+
+Build Frontend Locally
+cd frontend
+npm install
+npm run build --prod
+
+Output directory:
+
+frontend/dist/angular-15-crud/
+🚀 Frontend Deployment
+docker build -t <dockerhub-username>/mean-frontend:latest frontend
+docker push <dockerhub-username>/mean-frontend:latest
+
+On EC2:
+
+docker-compose pull frontend
+docker-compose up -d frontend
+🖥️ Access Application
+http://<EC2_PUBLIC_IP>
+🧠 Key Learnings
+
+Backend and frontend deployments are decoupled
+
+EC2 is used only for running containers
+
+CI/CD pipelines should build images, not servers
+
+Angular builds are resource intensive and should be handled carefully
